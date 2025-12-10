@@ -1,0 +1,25 @@
+[Unit]
+Description=Research-KB Search Daemon
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/brandon_behring/Claude/research-kb
+Environment="PATH=/home/brandon_behring/Claude/research-kb/venv/bin:/usr/bin"
+Environment="PYTHONPATH=/home/brandon_behring/Claude/research-kb"
+Environment="DATABASE_URL=postgresql://research_kb:research_kb@localhost:5432/research_kb"
+ExecStart=/home/brandon_behring/Claude/research-kb/venv/bin/python services/research_kb_daemon/daemon.py
+Restart=on-failure
+RestartSec=5s
+
+# Socket permissions
+UMask=0111
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=research_kb_daemon
+
+[Install]
+WantedBy=default.target
